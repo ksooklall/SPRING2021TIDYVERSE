@@ -317,8 +317,8 @@ Link
 
 
 # Kenan S
-Initial Description
-Link
+Initial Description: Demonstraction on how to load, select, rename, mutate, groupby and plot datasets
+Link: https://github.com/ksooklall/SPRING2021TIDYVERSE
 
 Revision/Addition Description
 Link

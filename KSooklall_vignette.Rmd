@@ -1,0 +1,54 @@
+# Load tidyverse and ggplot
+
+library(tidyverse)
+library(ggplot2)
+
+
+# For this example I will be using voting data from fivethirtyeight
+
+## 1 - Load data
+
+```{r}
+base_df <- read.csv('https://raw.githubusercontent.com/fivethirtyeight/data/master/non-voters/nonvoters_data.csv')
+```
+## 2 - Select columns we want to analyze
+
+```{r}
+df <- subset(base_df, select=c('ppage', 'educ', 'race', 'gender', 'income_cat', 'voter_category'))
+```
+
+## 3 - Rename column
+```{r}
+
+df <- rename(df, age=ppage)
+```
+
+## 4 - Create categorical data from income column
+
+```{r}
+
+df <- df %>% mutate(income_cat=recode(income_cat,
+                  "Less than $40k" = "low",
+                   "$40-75k" = "lower_middle",
+                   "$75-125k"="upper_middle",
+                   "$125k or more"="high"),
+                  voter_category=recode(voter_category,
+                                        'rarely/never'='rarely'))
+```
+
+## 5 - plotting the data
+
+```{r}
+
+ggplot(df, aes(x=voter_category, fill=voter_category)) + geom_bar(alpha=0.7) +
+geom_text(stat='count', aes(label=..count..), vjust=-1) + xlab('Voter Category')
+```
+
+## 6 - Group by and plotting
+```{r}
+
+edf <- df %>% group_by(educ, voter_category) %>% summarise(count=n(), .groups='drop')
+edf$percentage <- (edf %>% group_by(educ) %>% summarise(norm=count / sum(count), .groups='drop'))$norm
+
+ggplot(edf, aes(x=educ, y=percentage, fill=voter_category)) + geom_col(alpha=0.7) + xlab('education')
+```
