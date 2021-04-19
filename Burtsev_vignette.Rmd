@@ -41,3 +41,9 @@ ggplot(df, aes(x = fct_reorder(player_name, poss), y = poss)) +
                 geom_col(fill = "lightblue") + coord_flip()
 ```
 
+## 3C: How to reduce the number of bars?
+
+```{r}
+top_n(df, n=20, wt=poss) %>% ggplot(aes(x = fct_reorder(player_name, poss), y = poss))  +
+                geom_col(fill = "lightblue") + coord_flip()
+```
